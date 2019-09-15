@@ -1,0 +1,13 @@
+<%- include('../includes/header.ejs') %>
+
+login page
+
+<form action="/login" method="POST">
+    email: <input type="text" name="email"><br>
+    password: <input type="text" name="password"><br>
+    <input type="hidden" name="_csrf" value=<%= csrfToken %>>
+    <input type="submit" name="submit">
+</form>
+
+new user? <a href="/signup">register here</<a>
+<%- include('../includes/footer.ejs') %>
