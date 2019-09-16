@@ -1,5 +1,6 @@
 const User = require('../model/userSchema')
-const bcrypt = require('bcryptjs');
+, bcrypt = require('bcryptjs')
+, sendMail = require('../helpers/sendMail')
 
 exports.getHome = (req, res, next) => {
     res.render('welcome/index', {
@@ -34,7 +35,6 @@ exports.postlogin = (req, res, next) => {
            
             bcrypt.compare(password, user.password)
                 .then(isMatch => {
-                    
                     if (isMatch) {
                         //setting up sessions
 
@@ -55,37 +55,58 @@ exports.postlogin = (req, res, next) => {
         .catch(err => console.log(err))
 
 }
+
 exports.postSignup = (req, res, next) => {
     const { email, username, password, confirmpassword } = req.body
+    console.log(req.body)
 
-    //FIXME: VALIDATE THE USER DETAILS, CHECK USER WHETHER ALREADY EXISTS
-    if (password !== confirmpassword) {
+    //FIXME: VALIDATE THE USER DETAILS
+    if (password != confirmpassword) {
+        console.log("password should be same");
         req.flash('error', 'password should be same')
-        res.redirect('/signup')
+        return res.redirect('/signup')
     }
-   //TODO: SEND A EMAIL
-    bcrypt.hash(password, 10)
-        .then(hashedPassword => {
-            const user = new User({
-                username,
-                email,
-                password: hashedPassword,
-            })
-            
-            return user.save()
-        })
-        .then(() => {
-            return res.redirect('/login')
-        })
-        .catch((err) => {
-            res.redirect('/signup')
-        })
+
+    // CHECKING USER WHETHER ALREADY EXISTS
+    User.findOne({email})
+    .then(user => {
+        if(user){
+            req.flash('error','user already exists')
+            console.log('user already exists');
+            return res.redirect('/signup')
+        }
+        else{
+
+            //hashing the password
+            bcrypt.hash(password, 10)
+                .then(hashedPassword => {
+                    console.log('hashing the pswd started');
+                    const user = new User({
+                        username,
+                        email,
+                        password: hashedPassword,
+                    })
+
+                    return user.save()
+                })
+                .then(() => {
+                    //sending the email
+
+                    sendMail(email, 'Your account is created!', 'Thanks for the signup')
+                    return res.redirect('/login')
+                })
+                .catch((err) => {
+                    console.log("some error" + err);
+                    res.redirect('/signup')
+                })
+        }
+    })
 }
 
 exports.postlogout = (req, res, next) => {
     req.session.destroy(err => {
         console.log(err);
-        res.redirect('/welcome');
+        res.redirect('/welcome')
     });
 }
 

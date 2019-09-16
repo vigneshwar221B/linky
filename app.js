@@ -9,17 +9,20 @@ const express = require('express')
     , MongoDBStore = require('connect-mongodb-session')(session)
     , User = require('./model/userSchema')
     , csrf = require('csurf')
+    , morgan = require('morgan')
 
- const csrfProtection = csrf();
+const csrfProtection = csrf();
 
 //importing routes
 var authRoute = require('./routes/auth')
-var homeRoute = require('./routes/home')
+    , homeRoute = require('./routes/home')
+    , postsRoute = require('./routes/posts')
 
 //setting up configs
 app.set('view engine', 'ejs')
 app.use(bp.urlencoded({ extended: true }))
-app.use(flash());
+app.use(flash())
+app.use(morgan('dev'))
 
 //setting up cookies
 const store = new MongoDBStore({
@@ -36,16 +39,21 @@ app.use(
         store: store
     })
 );
+
+//adding csrf protection
 app.use(csrfProtection);
 
 //connect to mongodb
-mongoose.connect('mongodb://localhost/linksDB')
-    .then(() => {
-        console.log('connected to DB')
-    })
-    .catch(err => {
-        console.log('error connectying to DB')
-    })
+mongoose.connect('mongodb://localhost/linksDB', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => {
+    console.log('connected to DB')
+})
+.catch(err => {
+    console.log('error connectying to DB')
+})
 
 //custom middlewares
 app.use((req, res, next) => {
@@ -68,7 +76,13 @@ app.use((req, res, next) => {
 
 //setting up the routes
 app.use(authRoute)
+app.use(postsRoute)
 app.use(homeRoute)
+
+//404 page
+app.use((req, res, next) => {
+    res.send("404 page")
+})
 
 //starting the server
 app.listen(8080, () => console.log('server started at http://localhost:8080'))
