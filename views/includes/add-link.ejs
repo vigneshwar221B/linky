@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col s12" style="padding:0;">
+        <div class="card ">
+            <div class="card-content z-depth-2">
+                <span class="card-title">share your new group here: </span>
+
+                <div class="row " style="margin: 0;">
+
+                    <div class="col s12 offset-s3" id="panell" style="margin: 0; padding:0">
+                        <form method="POST" action="/profile/<%= id %>/add-link" id="myform2_id">
+
+                            <div class="input-field" id="groupname">
+                                <input  type="text" placeholder="Enter your groupname" name="name">
+                            </div>
+                            <div class="input-field" id="description">
+                                <input  type="text" placeholder="say about your group" name="body">
+                            </div>
+                            <div class="input-field" id="link">
+                                <input  type="text" placeholder="Enter your link" name="groupLink">  
+                            </div>
+
+                            <input  type="hidden" name="_csrf" value=<%= csrfToken %> >
+                            <button class="btn waves-effect waves-light deep-purple accent-3" type="submit" name="sumit">Submit
+                                <i class="material-icons right">send</i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

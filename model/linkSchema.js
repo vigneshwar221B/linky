@@ -4,6 +4,7 @@ const link = new mongoose.Schema({
     name: String,
     body: String,
     user: String,
+    groupLink:String,
     photos: [String],
     additionalLinks: [String],
     time: String,

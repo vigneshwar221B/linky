@@ -50,19 +50,10 @@ your posts:
 
 
 
-
-
-
-
-
-
-
-
-
-<div class="row">
+<div class="row" style="margin-top:30px;">
       
-    <div class="col s2"></div>
-    <div class="col s2 valign-wrapper" style="padding: 0; margin: 5px">
+    <div class="col s2">1</div>
+    <div class="col s2 " style="padding: 0; margin: 5px">
         <% if (!img){%>
                     <img src="https://svgshare.com/i/jJ.svg" class="responsive-img">
         <% }else{ %>
@@ -70,7 +61,7 @@ your posts:
         <%}%>
     </div>
 
-    <div class="col s5">
+    <div class="col s5 ">
 
         <p class="flow-text" style="font-family: 'Concert One'; margin: 0;">
         <%= username%><br>
@@ -84,38 +75,59 @@ your posts:
   
     </div>
 
-    <!-- Modal Structure -->
-  <div id="modal1" class="modal">
-    <div class="modal-content">
-      <h4>Edit picture</h4>
-      <form method="POST" action="/profile/<%= id %>/changeAvatar" enctype="multipart/form-data" id="myform_id">
-            <div class="file-field input-field">
-                <div class="btn deep-purple accent-3">
-                    <span>upload</span>
-                    <input type="file" name="image" id="image" >
-                </div>
-                <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text">
-                </div>
-            </div>
-                <input  type="hidden" name="_csrf" value=<%= csrfToken %>>
-         </form>
-    </div>
 
-    <div class="modal-footer">
-      <a href="javascript:$('#myform_id').submit();"
-       class="modal-close waves-effect waves-green btn-flat">save</a>
-    </div>
+    <div class="col s2">3</div>
 
-  </div>
-    <div class="col s2"></div>
+       <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+        <h4>Edit picture</h4>
+        <form method="POST" action="/profile/<%= id %>/changeAvatar" enctype="multipart/form-data" id="myform_id">
+                <div class="file-field input-field">
+                    <div class="btn deep-purple accent-3">
+                        <span>upload</span>
+                        <input type="file" name="image" id="image" >
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+                    <input  type="hidden" name="_csrf" value=<%= csrfToken %>>
+            </form>
+        </div>
+
+        <div class="modal-footer">
+        <a href="javascript:$('#myform_id').submit();"
+        class="modal-close waves-effect waves-green btn-flat">save</a>
+        </div>
+</div>
+
+
+
+<div class="col s12"><hr class="style14"></div>
+<!-- main posts part -->
+
+<div class="col s3">4</div>
+
+<div class="col s6">
+
+    <!-- add links box -->
+    <%- include('../includes/add-link.ejs') %>
+    <!-- add links box finished -->
     <div class="col s12"><hr class="style14"></div>
+    <!-- show posts box -->
+    <div class="row" style="margin: 0;">
+        your posts:
+    </div>
+
+</div>
 
 
+    
 
-    <div class="col s2">4</div>
-    <div class="col s6">5</div>
-    <div class="col s4">6</div>
+    
+
+<div class="col s3">6</div>
 
 </div>
           

@@ -1,23 +1,22 @@
 const User = require('../model/userSchema')
 
-exports.getAddLinks = (req,res,next) => {
-    res.render('posts/addPosts')
-}
-
 exports.postAddLinks = (req, res, next) => {
+
     const {id} = req.params
-    const {name, body} = req.body
+    const {name, body, groupLink} = req.body
     User.findOne({_id: id})
     .then(user => {
-        var newData = {
-            name,body
-        }
-        user.posts.push(newData)
+    
+            user.posts.push({
+                name, body, groupLink
+            })
+        
         return user.save()
+
     })
     .then(() => {
         res.redirect(`/profile/${id}`)
     })
+    .catch((err) => console.log(err))
 
-    
 }
