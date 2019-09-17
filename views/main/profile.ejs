@@ -20,18 +20,20 @@
         </p>
         <p><%= email %><br></p>
         <p><%= about %><br></p>
+        <%if(id == userId){%>
         <a class="waves-effect waves-light btn deep-purple accent-3 modal-trigger" href="#modal1">
         <i class="material-icons left">edit</i>
         Edit picture
         </a>
+        <%}%>
   
     </div>
     <div class="col s4">
-    
+      <%if(id == userId){%>
      <!-- add links box -->
     <%- include('../includes/add-link.ejs') %>
     <!-- add links box finished -->
-
+    <%}%>
     </div>
 
        <!-- Modal Structure -->
@@ -77,7 +79,11 @@
     <!-- show posts box -->
     <div class="col s12" style="margin: 0;">
         <blockquote>
+        <%if(id == userId){%>
             <p style="font-size:19pt;">your posts: </<p>
+        <%}else{%>
+        <p style="font-size:19pt;">posts: </<p>
+        <%}%>
         </blockquote>
         <ul>
             <% data.reverse().forEach(el => { %>
@@ -89,10 +95,21 @@
                             <img src="https://images.pexels.com/photos/1020315/pexels-photo-1020315.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500">
                         <%}%>
                         <span class="card-title"><%= el.name %></span>
-                        <a class="btn-floating halfway-fab waves-effect waves-light red"
-                        href="<%= el.groupLink %>"
-                        target="_blank">
-                        <i class="material-icons">link</i>
+
+                        <%if(el.type == "whatsapp"){%>
+                            <a class="btn-floating halfway-fab waves-effect waves-light green"
+                            href="<%= el.groupLink %>"
+                            target="_blank">
+                        <%}else if(el.type == "discord"){%>
+                            <a class="btn-floating halfway-fab waves-effect waves-light deep-purple accent-4"
+                            href="<%= el.groupLink %>"
+                            target="_blank">
+                        <%}else{%>
+                            <a class="btn-floating halfway-fab waves-effect waves-light blue"
+                            href="<%= el.groupLink %>"
+                            target="_blank">
+                        <% } %>
+                        <i class="material-icons ">link</i>
                         </a>
                         </div>
                         <div class="card-content">

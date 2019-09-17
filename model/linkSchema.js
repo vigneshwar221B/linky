@@ -17,7 +17,9 @@ const link = new mongoose.Schema({
     
     likes: [{
         user: String
-    }]
+    }],
+    
+    type: String
 })
 
 module.exports = link

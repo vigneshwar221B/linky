@@ -34,7 +34,8 @@ exports.getProfile = (req, res, next) => {
                 data: user.posts,
                 img: user.img,
                 id,
-                about: user.about
+                about: user.about,
+                userId : req.user._id
             })
         }
     }).catch(err => {

@@ -1,41 +1,37 @@
 const User = require('../model/userSchema')
 
-const fs = require('fs')
-const { promisify } = require('util')
-const unlinkAsync = promisify(fs.unlink)
 
 exports.postAddLinks = (req, res, next) => {
 
     const imageExists = req.file
-    var olderimagePath
-
+    
+    console.log(req.file);
     const { id } = req.params
     const { name, body, groupLink } = req.body
+
+    var tg = /t[.]me/g.exec(groupLink)
+    var dd = /discord/g.exec(groupLink)
+    var wa = /chat[.]whatsapp/.exec(groupLink)
+
+
+    var type = tg? "telegram": (dd? "discord" : "whatsapp")
 
     User.findOne({ _id: id })
         .then(user => {
 
             user.posts.push({
-                name, body, groupLink
+                name, body, groupLink,type
             })
+            console.log('------------------------');
+            console.log(imageExists);
+            console.log('-------------------------');
+           
+            if (imageExists) {
+                user.posts.reverse()[0].img = imageExists.path
+            }
             return user.save()
         })
-        .then(() => {
-            if(imageExists){
-                User.findOne({ _id: id })
-                    .then(user => {
-                        var revArray = user.posts.reverse()
-
-                        if (revArray[0].img)
-                            return unlinkAsync(olderimagePath)
-                        else {
-                            revArray[0].img = imageExists.path
-                            user.posts = revArray.reverse()
-                            return user.save()
-                        }
-                    })
-            }
-        })
+        
         .then(() => {
             res.redirect(`/profile/${id}`)
         })
