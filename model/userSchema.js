@@ -10,6 +10,7 @@ const user = new mongoose.Schema({
 
     password: String,
     img: String,
+    about: String,
 
     posts: [linkSchema],
     favorites: [String],

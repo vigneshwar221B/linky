@@ -1,59 +1,11 @@
 <%- include('../includes/header.ejs') %>
 <link rel="stylesheet" type="text/css" href="/css/profile.css" />
 <script src="/js/profile.js"></script>
-<%if(false){%>
-Your user profile!!!<br>
-<form method="POST" action="/profile/<%= id %>/changeAvatar" enctype="multipart/form-data">
-    <% if (!img){%>
-
-<div class="container">
-    <img src="https://svgshare.com/i/jJ.svg" class="container_img">
-</div class="container">
-
-<% }else{ %>
-
-<div class="container">
-    <img src="/<%= img %>" class="container_img">
-</div>
-
-<%}%>
-
-<label for="image">Image</label>
-<input type="file" name="image" id="image" ><br>
-<input type="hidden" name="_csrf" value="<%= csrfToken %>">
-<button class="btn" type="submit">Add photo</button>
-
-</form>
-
-user's email = <%= email %><br>
-user's name = <%= username%><br>
-
-your posts:
-
-<%if(data.length == 0){%>
-    sorry you don't have any posts
-<%}else{%>
-
-<ul>
-<% data.forEach(el => { %>
-
-    <li><%= el.name %></li>
-    <li><%= el.body %></li>
-    <li><%= el.user %></li>
-    <li><%= el.time %></li>
---------------------------------------
-<% }) %>
-</ul>
-
-<%}%>
-<%}%>
-
-
 
 <div class="row" style="margin-top:30px;">
       
-    <div class="col s2">1</div>
-    <div class="col s2 " style="padding: 0; margin: 5px">
+    <div class="col s1"></div>
+    <div class="col s2 " style="padding: 0; margin-top: 50px">
         <% if (!img){%>
                     <img src="https://svgshare.com/i/jJ.svg" class="responsive-img">
         <% }else{ %>
@@ -61,28 +13,32 @@ your posts:
         <%}%>
     </div>
 
-    <div class="col s5 ">
+    <div class="col s4 ">
 
-        <p class="flow-text" style="font-family: 'Concert One'; margin: 0;">
+        <p class="flow-text" style="font-family: 'Concert One'; margin-top: 50px;">
         <%= username%><br>
         </p>
         <p><%= email %><br></p>
-
+        <p><%= about %><br></p>
         <a class="waves-effect waves-light btn deep-purple accent-3 modal-trigger" href="#modal1">
         <i class="material-icons left">edit</i>
         Edit picture
         </a>
   
     </div>
+    <div class="col s4">
+    
+     <!-- add links box -->
+    <%- include('../includes/add-link.ejs') %>
+    <!-- add links box finished -->
 
-
-    <div class="col s2">3</div>
+    </div>
 
        <!-- Modal Structure -->
     <div id="modal1" class="modal">
         <div class="modal-content">
         <h4>Edit picture</h4>
-        <form method="POST" action="/profile/<%= id %>/changeAvatar" enctype="multipart/form-data" id="myform_id">
+        <form method="POST" action="/profile/<%= id %>/updateProfile" enctype="multipart/form-data" id="myform_id">
                 <div class="file-field input-field">
                     <div class="btn deep-purple accent-3">
                         <span>upload</span>
@@ -96,50 +52,61 @@ your posts:
             </form>
         </div>
 
+            <center><textarea form ="myform_id" name="about" id="taid" cols="25" 
+        wrap="soft" placeholder="description about you" style="margin: 20px; width: 75%"></textarea>
+        </center>
+
+        <br><br>
+
         <div class="modal-footer">
         <a href="javascript:$('#myform_id').submit();"
         class="modal-close waves-effect waves-green btn-flat">save</a>
         </div>
 </div>
 
+<div class="col s12">
+    <hr class="style14">
+</div>
 
-
-<div class="col s12"><hr class="style14"></div>
 <!-- main posts part -->
 
-<div class="col s3">4</div>
+<div class="col s3"></div>
 
 <div class="col s6">
-
-    <!-- add links box -->
-    <%- include('../includes/add-link.ejs') %>
-    <!-- add links box finished -->
-    <div class="col s12"><hr class="style14"></div>
+    
     <!-- show posts box -->
-    <div class="row" style="margin: 0;">
-        your posts:
+    <div class="col s12" style="margin: 0;">
+        <blockquote>
+            <p style="font-size:19pt;">your posts: </<p>
+        </blockquote>
+        <ul>
+            <% data.reverse().forEach(el => { %>
+                    <div class="card">
+                        <div class="card-image">
+                        <%if(el.img){%>
+                            <img src="/<%= el.img %>">
+                        <%}else{%>
+                            <img src="https://images.pexels.com/photos/1020315/pexels-photo-1020315.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500">
+                        <%}%>
+                        <span class="card-title"><%= el.name %></span>
+                        <a class="btn-floating halfway-fab waves-effect waves-light red"
+                        href="<%= el.groupLink %>"
+                        target="_blank">
+                        <i class="material-icons">link</i>
+                        </a>
+                        </div>
+                        <div class="card-content">
+                        <p><%= el.body %></div>
+                    </div>
+            <% }) %>
+        </ul>
     </div>
 
 </div>
 
-
-    
-
-    
-
-<div class="col s3">6</div>
+<div class="col s3"></div>
 
 </div>
           
-
-
-
-
-
-
-
-
-
-
 
 <%- include('../includes/footer.ejs') %>

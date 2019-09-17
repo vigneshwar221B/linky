@@ -5,5 +5,6 @@ const isAuth = require('../middleware/isAuth');
 router.get('/',isAuth, controller.getHome)
 router.get('/profile/:id',controller.getProfile)
 router.get('/totalusers',controller.getUsersCount)
-router.post('/profile/:id/changeAvatar', controller.postChangeAvatar)
+router.post('/profile/:id/updateProfile', controller.updateProfile)
+
 module.exports = router

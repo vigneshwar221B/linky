@@ -7,23 +7,35 @@
                 <div class="row " style="margin: 0;">
 
                     <div class="col s12 offset-s3" id="panell" style="margin: 0; padding:0">
-                        <form method="POST" action="/profile/<%= id %>/add-link" id="myform2_id">
+                        <form method="POST" action="/profile/<%= id %>/add-link" id="myform2_id"  enctype="multipart/form-data">
 
                             <div class="input-field" id="groupname">
                                 <input  type="text" placeholder="Enter your groupname" name="name">
-                            </div>
-                            <div class="input-field" id="description">
-                                <input  type="text" placeholder="say about your group" name="body">
                             </div>
                             <div class="input-field" id="link">
                                 <input  type="text" placeholder="Enter your link" name="groupLink">  
                             </div>
 
+                             <div class="file-field input-field">
+                                <div class="btn deep-purple accent-3">
+                                    <span>upload group image</span>
+                                    <input type="file" name="image" id="image" >
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input class="file-path validate" type="text">
+                                </div>
+                            </div>
+                         
                             <input  type="hidden" name="_csrf" value=<%= csrfToken %> >
-                            <button class="btn waves-effect waves-light deep-purple accent-3" type="submit" name="sumit">Submit
-                                <i class="material-icons right">send</i>
-                            </button>
+                            
                         </form>
+                        <textarea form ="myform2_id" name="body" id="taid" cols="35" wrap="soft" placeholder="description about your group"></textarea><br><br>
+                        
+                        <a class="waves-effect waves-light btn deep-purple accent-3" 
+                        id="loginbtn" href="javascript:$('#myform2_id').submit();">
+                        <i class="material-icons right">send</i>
+                            submit
+                        </a>
                     </div>
                 </div>
             </div>

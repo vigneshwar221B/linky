@@ -7,7 +7,7 @@ const unlinkAsync = promisify(fs.unlink)
 exports.getUsersCount = (req, res, next) =>
     User.countDocuments({}, (err, count) => {
         res.send(`Total no. of users: ${count}`)
-    })
+})
 
 
 exports.getHome = (req, res, next) => {
@@ -33,7 +33,8 @@ exports.getProfile = (req, res, next) => {
                 username: user.username,
                 data: user.posts,
                 img: user.img,
-                id
+                id,
+                about: user.about
             })
         }
     }).catch(err => {
@@ -42,12 +43,13 @@ exports.getProfile = (req, res, next) => {
     })
 }
 
-exports.postChangeAvatar = (req, res, next) => {
+exports.updateProfile = (req, res, next) => {
     const image = req.file
     const { id } = req.params
+    const {about} = req.body
 
-    if (!image) {
-        req.flash('error', 'choose a proper file')
+    if (!image || !about) {
+        req.flash('error', 'choose a proper file or about can\'t be empty ')
         return res.redirect(`/profile/${id}`)
     }
     else {
@@ -56,24 +58,20 @@ exports.postChangeAvatar = (req, res, next) => {
         User.findOne({ _id: id })
             .then(user => {
                 olderimagePath = user.img
-            
+                user.about = about
                 user.img = imagePath
                 return user.save()
             })
             .then(() => {
                 console.log(olderimagePath)
+
                 if(olderimagePath)
                     return unlinkAsync(olderimagePath)
                 
-        })
-        .then(()=>{
-            res.redirect(`/profile/${id}`)
-        })
-        .catch((err)=> console.log("img error"+err))
+            })
+            .then(()=>{
+                res.redirect(`/profile/${id}`)
+            })
+            .catch((err)=> console.log("img error"+err))
     }
-}
-
-
-exports.getLinks = (req, res, next) => {
-
 }
