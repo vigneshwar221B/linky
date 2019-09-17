@@ -4,7 +4,7 @@ const User = require('../model/userSchema')
 
 exports.getHome = (req, res, next) => {
     res.render('welcome/index', {
-        title: 'link'
+        title: 'linky'
     })
 }
 
@@ -106,6 +106,7 @@ exports.postSignup = (req, res, next) => {
 exports.postlogout = (req, res, next) => {
     req.session.destroy(err => {
         console.log(err);
+       // res.locals.isAuthenticated = !req.session.isLoggedIn
         res.redirect('/welcome')
     });
 }

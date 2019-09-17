@@ -1,6 +1,10 @@
+<%- include('../includes/header.ejs') %>
+
 <form method="POST">
     name:<input type="text" name="name"><br>
     link:<input type="text" name="body"><br>
     <input type="hidden" name="_csrf" value=<%= csrfToken %>>
     <input type="submit" name="submit">
 </form>
+
+<%- include('../includes/footer.ejs') %>

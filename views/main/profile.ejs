@@ -1,6 +1,30 @@
 <%- include('../includes/header.ejs') %>
-
+<link rel="stylesheet" type="text/css" href="/css/profile.css" />
+<script src="/js/profile.js"></script>
+<%if(false){%>
 Your user profile!!!<br>
+<form method="POST" action="/profile/<%= id %>/changeAvatar" enctype="multipart/form-data">
+    <% if (!img){%>
+
+<div class="container">
+    <img src="https://svgshare.com/i/jJ.svg" class="container_img">
+</div class="container">
+
+<% }else{ %>
+
+<div class="container">
+    <img src="/<%= img %>" class="container_img">
+</div>
+
+<%}%>
+
+<label for="image">Image</label>
+<input type="file" name="image" id="image" ><br>
+<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+<button class="btn" type="submit">Add photo</button>
+
+</form>
+
 user's email = <%= email %><br>
 user's name = <%= username%><br>
 
@@ -22,4 +46,88 @@ your posts:
 </ul>
 
 <%}%>
+<%}%>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="row">
+      
+    <div class="col s2">empty space</div>
+    <div class="col s1" style="padding: 0; margin: 10px">
+        <% if (!img){%>
+                    <img src="https://svgshare.com/i/jJ.svg" class="responsive-img">
+        <% }else{ %>
+                    <img class="responsive-img" src="/<%= img %>">
+        <%}%>
+    </div>
+
+    <div class="col s6">
+
+        <p class="flow-text" style="font-family: 'Concert One'; margin: 0;">
+        <%= username%><br>
+        </p>
+        <p><%= email %><br></p>
+
+        <a class="waves-effect waves-light btn deep-purple accent-3 modal-trigger" href="#modal1">
+        <i class="material-icons left">edit</i>
+        Edit profile
+        </a>
+  
+    </div>
+
+    <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Edit picture</h4>
+      <form method="POST" action="/profile/<%= id %>/changeAvatar" enctype="multipart/form-data" id="myform_id">
+            <div class="file-field input-field">
+                <div class="btn deep-purple accent-3">
+                    <span>upload</span>
+                    <input type="file" name="image" id="image" >
+                </div>
+                <div class="file-path-wrapper">
+                    <input class="file-path validate" type="text">
+                </div>
+            </div>
+                <input  type="hidden" name="_csrf" value=<%= csrfToken %>>
+         </form>
+    </div>
+
+    <div class="modal-footer">
+      <a href="javascript:$('#myform_id').submit();"
+       class="modal-close waves-effect waves-green btn-flat">save</a>
+    </div>
+
+  </div>
+
+      
+    <div class="col s2">empty space</div>
+
+    <div class="col s12"><hr class="style14"></div>
+    <div class="col s2">4</div>
+    <div class="col s6">5</div>
+    <div class="col s4">6</div>
+
+</div>
+          
+
+
+
+
+
+
+
+
+
+
+
 <%- include('../includes/footer.ejs') %>

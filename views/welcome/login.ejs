@@ -1,13 +1,27 @@
 <%- include('../includes/header.ejs') %>
+<link rel="stylesheet" href="css/login.css">
+<script src="js/login.js"></script>
+<div class="container">
+      <div class="row ">
 
-login page
+          <div class="col s6 offset-s3 z-depth-1 " id="panell">
+            <h5 id="title">Login Form</h5>
+            <form method="POST" action="/login" id="myform_id">
 
-<form action="/login" method="POST">
-    email: <input type="text" name="email"><br>
-    password: <input type="text" name="password"><br>
-    <input type="hidden" name="_csrf" value=<%= csrfToken %>>
-    <input type="submit" name="submit">
-</form>
+                <div class="input-field" id="username">
+                    <input  type="text" placeholder="email" name="email">
+                    
+                </div>
+                <div class="input-field" id="password">
+                    <input  type="password" placeholder="password" name="password">
+                    
+                </div>
+                <input  type="hidden" name="_csrf" value=<%= csrfToken %>>
+                <a class="waves-effect waves-light btn deep-purple accent-3" id="loginbtn" href="javascript:$('#myform_id').submit();">Login</a>
+                <p id="sub-text">new user? <a href="/signup">register here</a></p>
+        </form>
+        </div> 
+      </div>
+    </div>
 
-new user? <a href="/signup">register here</<a>
 <%- include('../includes/footer.ejs') %>

@@ -1,17 +1,38 @@
 <%- include('../includes/header.ejs') %>
+<link rel="stylesheet" href="css/signup.css">
+<script src="js/signup.js"></script>
+<div class="container">
+      <div class="row ">
 
-signup page
-<form action="/signup" method="POST">
+          <div class="col s6 offset-s3 z-depth-1 " id="panell">
+            <h5 id="title">Signup Form</h5>
+            <form method="POST" action="/signup" id="myform_id">
 
-    email:<input type="text" name="email"><br>
-    username:<input type="text" name="username"><br>
-    password:<input type="text" name="password"><br>
-    confirm password:<input type="text" name="confirmpassword"><br>
-    <input type="hidden" name="_csrf" value=<%= csrfToken %>>
-    <input type="submit" name="submit">
-    
-</form>
-
-already have a account?<a href="/login">login</a>
+                <div class="input-field" id="firstname" >
+                    <input  type="text" placeholder="firstname" name="firstname">
+                    
+                </div>
+                <div class="input-field" id="lastname" >
+                    <input  type="password" placeholder="lastname" name="lastname">
+                    
+                </div>
+                <div class="input-field" id="username" >
+                    <input  type="text" placeholder="username" name="username">
+                    
+                </div>
+                <div class="input-field" id="password" >
+                    <input  type="text" placeholder="password" name="password">
+                </div>
+                <div class="input-field" id="confirmpassword" >
+                    <input  type="text" placeholder="confirmpassword" name="confirmpassword">
+                    
+                </div>
+                        <input  type="hidden" name="_csrf" value=<%= csrfToken %>>
+                <a class="waves-effect waves-light btn deep-purple accent-3" id="loginbtn" href="javascript:$('#myform_id').submit();">Signup</a>
+                <p id="sub-text">Already have a account? <a href="/login">login</a></p>
+        </form>
+        </div> 
+      </div>
+    </div>
 
 <%- include('../includes/footer.ejs') %>

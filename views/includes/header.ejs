@@ -4,6 +4,37 @@
         <title><%= title %></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="css/style.css" rel="stylesheet">
-    </head>
-    <body>
+       
+    <link href="https://fonts.googleapis.com/css?family=Concert+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.js"
+        integrity="sha256-6DDZX77BrYnAmK9a3N3tvNPtyTIk1q1w9iW+UBtot3Y=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.css"
+        integrity="sha256-13EKEXRsynh3cmmNF1dlW6uvoC1SZVaW94bIHZQJoMU=" crossorigin="anonymous" />
+        
+</head>
+<body>
+<link rel="stylesheet" href="css/footer.css">
+
+<div class="navbar-fixed">
+<nav>
+    <div class="nav-wrapper  deep-purple accent-3">
+        
+        <ul class="right hide-on-med-and-down">
+        <%if (!isAuthenticated){%>
+            <li><a href="/login">login</a></li>
+            <li><a href="/signup">signup</a></li>
+            <%}else{%>
+            <li><a href="/profile/<%= id %>">my profile</a></li>
+            <li><a href="/logout">logout</a></li>
+            <%}%>
+        </ul>
+        <ul class="left hide-on-med-and-down">
+            <li><a href="/" style="font-family: 'Pacifico'; font-size: 26pt">Linky</a></li>
+        </ul>
+    </div>
+</nav>
+</div>

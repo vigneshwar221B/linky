@@ -10,8 +10,30 @@ const express = require('express')
     , User = require('./model/userSchema')
     , csrf = require('csurf')
     , morgan = require('morgan')
+    , multer = require('multer')
 
-const csrfProtection = csrf();
+const csrfProtection = csrf()
+
+const fileStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'images');
+    },
+    filename: (req, file, cb) => {
+        cb(null, new Date().toISOString() + '-' + file.originalname);
+    }
+})
+
+const fileFilter = (req, file, cb) => {
+    if (
+        file.mimetype === 'image/png' ||
+        file.mimetype === 'image/jpg' ||
+        file.mimetype === 'image/jpeg'
+    ) {
+        cb(null, true)
+    } else {
+        cb(null, false)
+    }
+};
 
 //importing routes
 var authRoute = require('./routes/auth')
@@ -23,6 +45,13 @@ app.set('view engine', 'ejs')
 app.use(bp.urlencoded({ extended: true }))
 app.use(flash())
 app.use(morgan('dev'))
+app.use(
+    multer({ storage: fileStorage, fileFilter: fileFilter }).single('image')
+)
+
+//setting up static files
+app.use(express.static(path.join(__dirname, 'public')))
+app.use('/images', express.static(path.join(__dirname, 'images')))
 
 //setting up cookies
 const store = new MongoDBStore({
@@ -30,7 +59,6 @@ const store = new MongoDBStore({
     collection: 'sessions'
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(
     session({
         secret: 'meow',
@@ -63,15 +91,17 @@ app.use((req, res, next) => {
     User.findById(req.session.user._id)
     .then(user => {
         req.user = user;
+        res.locals.id = req.user.id
         next();
     })
     .catch(err => console.log(err));
 });
 
 app.use((req, res, next) => {
-    res.locals.isAuthenticated = req.session.isLoggedIn;
-    res.locals.csrfToken = req.csrfToken();
-    next();
+    res.locals.isAuthenticated = req.session.isLoggedIn
+    res.locals.csrfToken = req.csrfToken()
+    console.log(req.session.user);
+    next()
 });
 
 //setting up the routes
