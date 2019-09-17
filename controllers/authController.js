@@ -57,7 +57,7 @@ exports.postlogin = (req, res, next) => {
 }
 
 exports.postSignup = (req, res, next) => {
-    const { email, username, password, confirmpassword } = req.body
+    const { email, username, password, confirmpassword,firstname, lastname } = req.body
     console.log(req.body)
 
     //FIXME: VALIDATE THE USER DETAILS
@@ -82,6 +82,8 @@ exports.postSignup = (req, res, next) => {
                 .then(hashedPassword => {
                     console.log('hashing the pswd started');
                     const user = new User({
+                        firstname,
+                        lastname,
                         username,
                         email,
                         password: hashedPassword,

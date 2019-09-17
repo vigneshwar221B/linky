@@ -1,6 +1,8 @@
 <%- include('../includes/header.ejs') %>
 <link rel="stylesheet" href="css/signup.css">
 <script src="js/signup.js"></script>
+
+
 <div class="container">
       <div class="row ">
 
@@ -13,11 +15,15 @@
                     
                 </div>
                 <div class="input-field" id="lastname" >
-                    <input  type="password" placeholder="lastname" name="lastname">
+                    <input  type="text" placeholder="lastname" name="lastname">
                     
                 </div>
                 <div class="input-field" id="username" >
                     <input  type="text" placeholder="username" name="username">
+                    
+                </div>
+                  <div class="input-field" id="email" >
+                    <input  type="text" placeholder="email" name="email">
                     
                 </div>
                 <div class="input-field" id="password" >
@@ -33,6 +39,6 @@
         </form>
         </div> 
       </div>
-    </div>
+</div>
 
 <%- include('../includes/footer.ejs') %>

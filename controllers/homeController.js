@@ -1,4 +1,8 @@
 const User = require('../model/userSchema')
+const fs = require('fs')
+const { promisify } = require('util')
+
+const unlinkAsync = promisify(fs.unlink)
 
 exports.getUsersCount = (req, res, next) =>
     User.countDocuments({}, (err, count) => {
@@ -44,19 +48,28 @@ exports.postChangeAvatar = (req, res, next) => {
 
     if (!image) {
         req.flash('error', 'choose a proper file')
-        return es.redirect(`/profile/${id}`)
+        return res.redirect(`/profile/${id}`)
     }
     else {
         const imagePath = image.path;
-
+        var olderimagePath
         User.findOne({ _id: id })
             .then(user => {
+                olderimagePath = user.img
+            
                 user.img = imagePath
                 return user.save()
             })
             .then(() => {
-                res.redirect(`/profile/${id}`)
-            })
+                console.log(olderimagePath)
+                if(olderimagePath)
+                    return unlinkAsync(olderimagePath)
+                
+        })
+        .then(()=>{
+            res.redirect(`/profile/${id}`)
+        })
+        .catch((err)=> console.log("img error"+err))
     }
 }
 

@@ -1,5 +1,5 @@
 #panell{
-  margin-top: 100px;
+  margin-top: 60px;
   padding: 0px;
 }
 
@@ -23,7 +23,7 @@ form{
 }
 
 
-#firstname,#lastname,#password,#confirmpassword,#username{
+#firstname,#lastname,#password,#confirmpassword,#username,#email{
 margin-left: 20px;
 margin-right: 20px;
 }
@@ -42,6 +42,6 @@ color: #651fff;
 }
 
 .row{
-  margin-top: 40px;
-  margin-bottom: 100px;
+  margin-top: 10px;
+  margin-bottom: 70px;
 }
