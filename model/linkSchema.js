@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
+, Schema = mongoose.Schema 
 
-const link = new mongoose.Schema({
+const link = new Schema({
     name: String,
     body: String,
     user: String,
@@ -8,18 +9,16 @@ const link = new mongoose.Schema({
     groupLink:String,
     img: String,
     additionalLinks: [String],
-    time: String,
+    // time: Date.now(),
 
-    comments:[{
-        body: String,
-        user: String
-    }],
-    
-    likes: [{
-        user: String
-    }],
+    likes: [Object],
+
+    userId: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     
     type: String
 })
 
-module.exports = link
+module.exports = mongoose.model('Link', link)

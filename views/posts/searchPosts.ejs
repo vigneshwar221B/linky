@@ -1,0 +1,35 @@
+<%- include('../includes/header.ejs') %>
+
+<link rel="stylesheet" type="text/css" href="/css/search.css" />
+<script src="/js/search.js"></script>
+
+
+<div class="container" style="margin-bottom: 300px">
+    <div class="row s12" style="margin-bottom: 100px">
+        <div class="col s1"></div>
+            <div class="col s10">
+            
+                <div class="card-panel z-depth-3" style="padding-left: 17px; padding-right: 17px;padding-top: 3px;padding-bottom: 3px; margin-top:35px">
+            
+                    <input type="text" id="search" 
+                    autocomplete="off" placeholder="search for groups"></input>
+                    
+                </div>
+                <p class="center">
+                    <button class="waves-effect waves-light btn deep-purple accent-3">
+                        <i class="material-icons left">search</i>
+                        search
+                    </button>
+                    </p>
+
+            </div>
+
+        <div class="col s1"></div>
+    </div>
+    
+    <div class="row s12">
+        
+    </div>
+</div>
+
+<%- include('../includes/footer.ejs') %>

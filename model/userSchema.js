@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const linkSchema = require('./linkSchema')
 
 const user = new mongoose.Schema({
     
@@ -12,8 +11,7 @@ const user = new mongoose.Schema({
     img: String,
     about: String,
 
-    posts: [linkSchema],
-    favorites: [String],
+    favorites: [Object],
 
     requested: [{
         body: String,

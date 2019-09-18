@@ -86,13 +86,17 @@ mongoose.connect('mongodb://localhost/linksDB', {
 //custom middlewares
 app.use((req, res, next) => {
     if (!req.session.user) {
+        req.user = {}
+        req.user._id = {}
         return next();
     }
     User.findById(req.session.user._id)
     .then(user => {
-        req.user = user;
+       
+        req.user = user
         res.locals.id = req.user.id
-        next();
+        next()
+        
     })
     .catch(err => console.log(err));
 });
@@ -100,7 +104,7 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
     res.locals.isAuthenticated = req.session.isLoggedIn
     res.locals.csrfToken = req.csrfToken()
-    console.log(req.session.user);
+    // console.log(req.session.user);
     next()
 });
 

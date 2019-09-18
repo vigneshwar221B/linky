@@ -1,40 +1,44 @@
 const User = require('../model/userSchema')
-
+const Link = require('../model/linkSchema')
 
 exports.postAddLinks = (req, res, next) => {
 
     const imageExists = req.file
-    
-    console.log(req.file);
+
+    console.log(req.file)
     const { id } = req.params
     const { name, body, groupLink } = req.body
 
     var tg = /t[.]me/g.exec(groupLink)
     var dd = /discord/g.exec(groupLink)
-    var wa = /chat[.]whatsapp/.exec(groupLink)
+    var wa = /chat[.]whatsapp/g.exec(groupLink)
 
+    var type = tg ? "telegram" : (dd ? "discord" : "whatsapp")
 
-    var type = tg? "telegram": (dd? "discord" : "whatsapp")
-
-    User.findOne({ _id: id })
-        .then(user => {
-
-            user.posts.push({
-                name, body, groupLink,type
-            })
-            console.log('------------------------');
-            console.log(imageExists);
-            console.log('-------------------------');
-           
-            if (imageExists) {
-                user.posts.reverse()[0].img = imageExists.path
-            }
-            return user.save()
+    var link
+    if(imageExists){
+        link = new Link({
+            name, body, groupLink, type,
+            userId: req.user,
+            img: imageExists.path
         })
-        
-        .then(() => {
-            res.redirect(`/profile/${id}`)
+    }else{
+        link = new Link({
+            name, body, groupLink, type,
+            userId: req.user
         })
-        .catch((err) => console.log("img error" + err))
+    }
+    
+    link.save()
+    .then(() => {
+        res.redirect(`/profile/${id}`)
+    })
+    .catch((err) => console.log("img error" + err))
 
+}
+
+exports.getSearch = (req, res, next) => {
+    res.render('posts/searchPosts', {
+        title: 'search'
+    })
 }
