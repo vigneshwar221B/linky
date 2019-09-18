@@ -38,7 +38,12 @@ exports.postAddLinks = (req, res, next) => {
 }
 
 exports.getSearch = (req, res, next) => {
+    
     res.render('posts/searchPosts', {
         title: 'search'
     })
+}
+
+exports.getSearchRes = (req, res, next) => {
+    res.send(req.query.keyString)
 }

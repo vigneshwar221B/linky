@@ -29,12 +29,13 @@
         <%}%>
   
     </div>
-    
+
+    <!-- add links box -->
     <div class="col s4">
         <%if(user._id.toString() == activeUser._id.toString()){%>
-        <!-- add links box -->
+      
         <%- include('../includes/add-link.ejs') %>
-        <!-- add links box finished -->
+        
         <%}%>
     </div>
 
@@ -57,9 +58,9 @@
         </div>
 
         <center>
-        <textarea form ="myform_id" name="about" id="taid" cols="25" 
-        wrap="soft" placeholder="description about you" 
-        style="margin: 20px; width: 75%"></textarea>
+            <textarea form ="myform_id" name="about" id="taid" cols="25" 
+            wrap="soft" placeholder="description about you" 
+            style="margin: 20px; width: 75%"></textarea>
         </center>
 
         <br><br>
@@ -102,15 +103,15 @@
                         <span class="card-title"><%= el.name %></span>
 
                         <%if(el.type == "whatsapp"){%>
-                            <a class="btn-floating halfway-fab waves-effect waves-light green"
+                            <a class="btn-floating halfway-fab waves-effect waves-light green pulse btn-large"
                             href="<%= el.groupLink %>"
                             target="_blank">
                         <%}else if(el.type == "discord"){%>
-                            <a class="btn-floating halfway-fab waves-effect waves-light deep-purple accent-4"
+                            <a class="btn-floating halfway-fab waves-effect waves-light deep-purple accent-4 pulse btn-large"
                             href="<%= el.groupLink %>"
                             target="_blank">
                         <%}else{%>
-                            <a class="btn-floating halfway-fab waves-effect waves-light blue"
+                            <a class="btn-floating halfway-fab waves-effect waves-light blue pulse btn-large"
                             href="<%= el.groupLink %>"
                             target="_blank">
                         <% } %>
