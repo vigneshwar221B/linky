@@ -5,28 +5,37 @@
 
 
 <div class="container" style="margin-bottom: 300px">
-    <div class="row s12" style="margin-bottom: 100px">
+    <div class="row s12" style="margin-bottom: 10px">
         <div class="col s1"></div>
             <div class="col s10">
             
-                <div class="card-panel z-depth-3" style="padding-left: 17px; padding-right: 17px;padding-top: 3px;padding-bottom: 3px; margin-top:35px">
+                <div class="card-panel z-depth-3" 
+                style="padding-left: 17px; padding-right: 17px;padding-top: 3px;padding-bottom: 3px; margin-top:35px">
 
                     <input type="text" id="search-box" 
                     autocomplete="off" onkeyup="onSearch()"
                     placeholder="search for groups"></input>
                     
                 </div>
-                <p class="center">
-                    <button class="waves-effect waves-light btn deep-purple accent-3"
-                    onClick="onSearch()">
-                        <i class="material-icons left">search</i>
-                        search
-                    </button>
-                </p>
 
             </div>
 
-        <div class="col s1"></div>
+        <div class="col s1"> </div>
+    </div>
+
+    <!-- tools -->
+    <div class="row s12" id="tools" style="margin-bottom: 0;"> 
+          <div class="input-field" style="height: 30px; width: 350px">
+            <select multiple id="type">
+            
+                <option value="all" disabled selected >type</option>
+               
+                <option value="whatsapp" selected>whatsapp</option>
+                <option value="discord" selected>discord</option>
+                <option value="telegram" selected>telegram</option>
+
+            </select>
+        </div>
     </div>
 
     <!-- results -->

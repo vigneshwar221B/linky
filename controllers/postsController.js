@@ -1,5 +1,6 @@
 const User = require('../model/userSchema')
-const Link = require('../model/linkSchema')
+    , Link = require('../model/linkSchema')
+    , stringSimilarity = require('string-similarity');
 
 exports.postAddLinks = (req, res, next) => {
 
@@ -16,34 +17,86 @@ exports.postAddLinks = (req, res, next) => {
     var type = tg ? "telegram" : (dd ? "discord" : "whatsapp")
 
     var link
-    if(imageExists){
+    if (imageExists) {
         link = new Link({
             name, body, groupLink, type,
             userId: req.user,
             img: imageExists.path
         })
-    }else{
+    } else {
         link = new Link({
             name, body, groupLink, type,
             userId: req.user
         })
     }
-    
+
     link.save()
-    .then(() => {
-        res.redirect(`/profile/${id}`)
-    })
-    .catch((err) => console.log("img error" + err))
+        .then(() => {
+            res.redirect(`/profile/${id}`)
+        })
+        .catch((err) => console.log("img error" + err))
 
 }
 
 exports.getSearch = (req, res, next) => {
-    
+
     res.render('posts/searchPosts', {
         title: 'search'
     })
 }
 
+
 exports.getSearchRes = (req, res, next) => {
-    res.send(req.query.keyString)
+    var { keyString, type } = req.query
+    
+    console.log("type "+typeof(type));
+
+    var queryList = type.split(',')
+    
+    var ans
+    
+    //get all the links of given type
+   
+    Link.find({ type : {$in : queryList} })
+        .then(data => {
+            console.log(data);
+
+            var list = data.map(e => e.name)
+
+            //find the best matches
+            ans = stringSimilarity.findBestMatch(keyString, list).ratings
+
+            //get the list by ratings
+            ans.sort((first, second) => first.rating < second.rating)
+           
+            console.log(ans);
+
+            //get all the names
+            const linkNames = ans.map(e => e.target)
+            console.log(linkNames);
+
+            
+            //get their corresponding links object
+            return Link.find({ name: { $in: linkNames } })
+
+        })
+        .then((docs) => {
+            //sort the documents
+
+            var sortedDoc = []
+
+            ans.forEach(e1 => {
+                docs.forEach(e2 => {
+                    console.log(e1, e2.name);
+                    if(e1.target == e2.name)
+                        sortedDoc.push(e2)
+                })
+            })
+           
+
+            res.send({ keyString, type })
+        })
+        .catch(err => console.log(err))
+
+
 }
