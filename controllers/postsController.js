@@ -54,7 +54,6 @@ exports.getSearchRes = (req, res, next) => {
     var queryList = type.split(',')
     
     var ans
-    
     //get all the links of given type
    
     Link.find({ type : {$in : queryList} })
@@ -94,7 +93,7 @@ exports.getSearchRes = (req, res, next) => {
             })
            
 
-            res.send({ keyString, type })
+            res.send(sortedDoc)
         })
         .catch(err => console.log(err))
 

@@ -67,7 +67,7 @@
 
         <div class="modal-footer">
         <a href="javascript:$('#myform_id').submit();"
-        class="modal-close waves-effect waves-green btn-flat">save</a>
+        class="modal-close waves-effect waves-light btn deep-purple accent-3">save</a>
         </div>
 </div>
 
@@ -92,7 +92,7 @@
         </blockquote>
         <ul>
             <% posts.reverse().forEach(el => { %>
-                    <div class="card" style="margin-bottom: 25px;">
+                    <div class="card hoverable" style="margin-bottom: 25px;">
                         <div class="card-image">
                         <%if(el.img){%>
                             <img src="/<%= el.img %>" style="height: 310px; width: fill;">

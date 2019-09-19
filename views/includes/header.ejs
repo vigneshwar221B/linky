@@ -23,7 +23,7 @@
 <nav>
     <div class="nav-wrapper deep-purple accent-3">
         
-        <ul class="right hide-on-med-and-down">
+        <ul class="right">
         <%if (!isAuthenticated){%>
 
             <li><a href="/search">search</a></li>
@@ -32,13 +32,14 @@
           
             <%}else{%>
 
+            <li><a href="/favorites">favorites</a></li>
             <li><a href="/search">search</a></li>
             <li><a href="/profile/<%= id %>">my profile</a></li>
             <li><a href="/logout">logout</a></li>
             
             <%}%>
         </ul>
-        <ul class="left hide-on-med-and-down">
+        <ul class="left">
             <li><a href="/" style="font-family: 'Pacifico'; font-size: 26pt">Linky</a></li>
         </ul>
     </div>
