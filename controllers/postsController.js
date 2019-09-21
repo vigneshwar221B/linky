@@ -2,6 +2,38 @@ const User = require('../model/userSchema')
     , Link = require('../model/linkSchema')
     , stringSimilarity = require('string-similarity');
 
+exports.changePostLinks = (req, res, next) => {
+    const imageExists = req.file
+
+    console.log(req.file)
+    
+    const { name, body, groupLink, postId } = req.body
+
+    var tg = /https:\/\/www[.]t[.]me/g.exec(groupLink)
+    var dd = /https:\/\/www[.]discord/g.exec(groupLink)
+    var wa = /https:\/\/www[.]chat[.]whatsapp/g.exec(groupLink)
+
+    var type = tg ? "telegram" : (dd ? "discord" : "whatsapp")
+
+    Link.findOne({_id : postId})
+    .then(doc => {
+        doc.name = name
+        doc.body = body
+        doc.groupLink = groupLink
+        doc.type = type
+
+        if(imageExists)
+            doc.img = imageExists.path
+        
+            return doc.save()
+    })
+    .then(() => {
+        res.redirect(`/profile/${req.user._id}`)
+    })
+    .catch(err => console.log(err))
+
+}
+
 exports.postAddLinks = (req, res, next) => {
 
     const imageExists = req.file
@@ -10,9 +42,9 @@ exports.postAddLinks = (req, res, next) => {
     const { id } = req.params
     const { name, body, groupLink } = req.body
 
-    var tg = /t[.]me/g.exec(groupLink)
-    var dd = /discord/g.exec(groupLink)
-    var wa = /chat[.]whatsapp/g.exec(groupLink)
+    var tg = /https:\/\/www[.]t[.]me/g.exec(groupLink)
+    var dd = /https:\/\/www[.]discord/g.exec(groupLink)
+    var wa = /https:\/\/www[.]chat[.]whatsapp/g.exec(groupLink)
 
     var type = tg ? "telegram" : (dd ? "discord" : "whatsapp")
 
@@ -26,7 +58,8 @@ exports.postAddLinks = (req, res, next) => {
     } else {
         link = new Link({
             name, body, groupLink, type,
-            userId: req.user
+            userId: req.user,
+            dimg: "http://www.pixel-creation.com/wp-content/uploads/black-red-background-sf-wallpaper-800x450.jpg"
         })
     }
 

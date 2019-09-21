@@ -87,7 +87,8 @@ exports.postSignup = (req, res, next) => {
                         username,
                         email,
                         password: hashedPassword,
-                        about: "I'm new here! But I will add something about me in the future. Stay tuned."
+                        about: "I'm new here! But I will add something about me in the future. Stay tuned",
+                        dimg: "https://svgshare.com/i/jJ.svg"
                     })
 
                     return user.save()

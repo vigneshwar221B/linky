@@ -6,10 +6,10 @@
       
     <div class="col s1"></div>
     <div class="col s2 " style="padding: 0; margin-top: 50px">
-        <% if (!user.img){ %>
-                    <img src="https://svgshare.com/i/jJ.svg" class="responsive-img">
-        <% }else{ %>
-                    <img class="responsive-img" src="/<%= user.img %>">
+        <%if(user.img){%>
+            <img class="responsive-img" src='/<%= user.img %>'>
+        <%}else{%>
+            <img class="responsive-img" src='<%= user.dimg %>'>
         <%}%>
     </div>
 
@@ -26,6 +26,41 @@
             <i class="material-icons left">edit</i>
             Edit picture
             </a>
+
+
+            <!-- Modal Structure -->
+            <div id="modal1" class="modal">
+                <div class="modal-content">
+                    <h4>Edit picture</h4>
+                    <form method="POST" action="/profile/<%= id %>/updateProfile" enctype="multipart/form-data" id="myform_id">
+                        <div class="file-field input-field">
+                            <div class="btn deep-purple accent-3">
+                                <span>upload</span>
+                                <input type="file" name="image" id="image" >
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text">
+                            </div>
+                        </div>
+                        <input  type="hidden" name="_csrf" value=<%= csrfToken %>>
+                    </form>
+                </div>
+
+                <center>
+                    <textarea form ="myform_id" name="about" id="taid" cols="25" 
+                    wrap="soft" placeholder="description about you" 
+                    style="margin: 20px; width: 75%"></textarea>
+                </center>
+
+                <br><br>
+
+                <div class="modal-footer">
+                    <a href="javascript:$('#myform_id').submit();"
+                    class="modal-close waves-effect waves-light btn deep-purple accent-3">save</a>
+                </div>
+            </div>
+        
+        
         <%}%>
   
     </div>
@@ -33,43 +68,11 @@
     <!-- add links box -->
     <div class="col s4">
         <%if(user._id.toString() == activeUser._id.toString()){%>
-      
             <%- include('../includes/add-link.ejs') %>
-        
         <%}%>
     </div>
 
-    <!-- Modal Structure -->
-    <div id="modal1" class="modal">
-        <div class="modal-content">
-        <h4>Edit picture</h4>
-        <form method="POST" action="/profile/<%= id %>/updateProfile" enctype="multipart/form-data" id="myform_id">
-                <div class="file-field input-field">
-                    <div class="btn deep-purple accent-3">
-                        <span>upload</span>
-                        <input type="file" name="image" id="image" >
-                    </div>
-                    <div class="file-path-wrapper">
-                        <input class="file-path validate" type="text">
-                    </div>
-                </div>
-                    <input  type="hidden" name="_csrf" value=<%= csrfToken %>>
-            </form>
-        </div>
-
-        <center>
-            <textarea form ="myform_id" name="about" id="taid" cols="25" 
-            wrap="soft" placeholder="description about you" 
-            style="margin: 20px; width: 75%"></textarea>
-        </center>
-
-        <br><br>
-
-        <div class="modal-footer">
-        <a href="javascript:$('#myform_id').submit();"
-        class="modal-close waves-effect waves-light btn deep-purple accent-3">save</a>
-        </div>
-</div>
+    
 
 <div class="col s12">
     <hr class="style14">
@@ -77,7 +80,48 @@
 
 <!-- main posts part -->
 
-<div class="col s3"></div>
+<div class="col s3">
+
+<!-- modal structure -->
+
+    <%if(user._id.toString() == activeUser._id.toString()){%>
+      
+        <div id="modal2" class="modal">
+            <div class="modal-content">
+                <h4>Edit post  </h4>
+                <form method="POST" action="/post/change-link" id="myform3_id"  enctype="multipart/form-data">
+
+                    <div class="input-field" id="groupname">
+                        <input  type="text" placeholder="Enter your groupname" name="name">
+                    </div>
+                    <div class="input-field" id="link">
+                        <input  type="text" placeholder="Enter your link" name="groupLink">  
+                    </div>
+
+                    <div class="file-field input-field">
+                        <div class="btn deep-purple accent-3">
+                            <span>upload group image</span>
+                            <input type="file" name="image" id="image" >
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
+                    </div>
+                    
+                    <input  type="hidden" name="_csrf" value=<%= csrfToken %> >
+                    <input  id = "postId" type="hidden" name="postId" >
+                </form>
+                <textarea form ="myform3_id" name="body" id="taid" cols="35" wrap="soft" placeholder="description about your group"></textarea><br><br>
+                
+            </div>
+        
+            <div class="modal-footer">
+                <a href="javascript:$('#myform3_id').submit();"
+                class="modal-close waves-effect waves-light btn deep-purple accent-3">save</a>
+            </div>
+        </div>
+    <%}%>
+</div>
 
 <div class="col s6">
     
@@ -94,29 +138,43 @@
             <% posts.reverse().forEach(el => { %>
                     <div class="card hoverable" style="margin-bottom: 25px;">
                         <div class="card-image">
+                        
                         <%if(el.img){%>
-                            <img src="/<%= el.img %>" style="height: 310px; width: fill;">
+                            <img src='/<%= el.img %>' style="height: 310px; width: fill;">
                         <%}else{%>
-                            <img src="https://images.pexels.com/photos/1020315/pexels-photo-1020315.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-                            style="height: 310px; width: fill;">
+                            <img src='<%= el.dimg %>' style="height: 310px; width: fill;">
                         <%}%>
+
                         <span class="card-title"><%= el.name %></span>
 
                         <%if(el.type == "whatsapp"){%>
                             <a class="btn-floating halfway-fab waves-effect waves-light green pulse btn-large"
                             href="<%= el.groupLink %>"
                             target="_blank">
+                            <i class="material-icons ">link</i>
+                        </a>
                         <%}else if(el.type == "discord"){%>
                             <a class="btn-floating halfway-fab waves-effect waves-light deep-purple accent-4 pulse btn-large"
                             href="<%= el.groupLink %>"
                             target="_blank">
+                            <i class="material-icons ">link</i>
+                        </a>
                         <%}else{%>
                             <a class="btn-floating halfway-fab waves-effect waves-light blue pulse btn-large"
                             href="<%= el.groupLink %>"
                             target="_blank">
-                        <% } %>
-                        <i class="material-icons ">link</i>
+                            <i class="material-icons ">link</i>
                         </a>
+                        <% } %>
+                        
+                        <%if(user._id.toString() == activeUser._id.toString()){%>
+                            <a class="btn-floating halfway-fab waves-effect waves-light red btn-large modal-trigger"
+                                onClick="openModal('<%= el._id %>')"
+                                href="#modal2"
+                                target="_blank" style="margin-right: 70px">
+                                <i class="material-icons ">edit</i>
+                            </a>
+                        <%}%>
                         </div>
                         <div class="card-content">
                         <p><%= el.body %></div>

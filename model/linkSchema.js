@@ -8,6 +8,7 @@ const link = new Schema({
 
     groupLink:String,
     img: String,
+    dimg: String,
     additionalLinks: [String],
     // time: Date.now(),
 
