@@ -2,9 +2,11 @@ const router = require('express').Router()
     , controller = require('../controllers/postsController')
     , isAuth = require('../middleware/isAuth')
 
-
+router.get('/', controller.getSearch)
 router.post('/profile/:id/add-link', isAuth, controller.postAddLinks)
-router.get('/search', controller.getSearch)
 router.get('/searchRes', controller.getSearchRes)
+
+router.get('/post/:id', controller.getPost)
+
 
 module.exports = router

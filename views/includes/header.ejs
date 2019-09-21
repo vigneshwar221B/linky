@@ -26,14 +26,14 @@
         <ul class="right">
         <%if (!isAuthenticated){%>
 
-            <li><a href="/search">search</a></li>
+            
             <li><a href="/login">login</a></li>
             <li><a href="/signup">signup</a></li>
           
             <%}else{%>
 
             <li><a href="/favorites">favorites</a></li>
-            <li><a href="/search">search</a></li>
+            
             <li><a href="/profile/<%= id %>">my profile</a></li>
             <li><a href="/logout">logout</a></li>
             

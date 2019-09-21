@@ -47,55 +47,111 @@ exports.getSearch = (req, res, next) => {
 
 
 exports.getSearchRes = (req, res, next) => {
-    var { keyString, type } = req.query
+    var { keyString, type, qtype } = req.query
     
-    console.log("type "+typeof(type));
+    //console.log("qtype ",typeof(qtype));
 
     var queryList = type.split(',')
     
     var ans
     //get all the links of given type
+   if(qtype == 'group'){
+       Link.find({ type: { $in: queryList } })
+           .then(data => {
+               //console.log(data);
+
+               var list = data.map(e => e.name)
+
+               //find the best matches
+               ans = stringSimilarity.findBestMatch(keyString, list).ratings
+
+               //get the list by ratings
+               ans.sort((first, second) => first.rating < second.rating)
+
+               //console.log(ans);
+
+               //get all the names
+               const linkNames = ans.map(e => e.target)
+               //console.log(linkNames);
+
+
+               //get their corresponding links object
+               return Link.find({ name: { $in: linkNames } })
+
+           })
+           .then((docs) => {
+               //sort the documents
+
+               var sortedDoc = []
+
+               ans.forEach(e1 => {
+                   docs.forEach(e2 => {
+                      // console.log(e1, e2.name);
+                       if (e1.target == e2.name)
+                           sortedDoc.push(e2)
+                   })
+               })
+
+               res.send(sortedDoc)
+           })
+           .catch(err => console.log(err))
+
+   }else{
+       var userNameList, ans
+       User.find()
+           .then(data => {
+                userNameList = data.map(e => e.username)
+                //console.log(userNameList)
+
+               ans = stringSimilarity.findBestMatch(keyString, userNameList).ratings
+
+               ans.sort((first, second) => first.rating < second.rating)
+
+               const userNames = ans.map(e => e.target)
+
+               console.log(userNames);
+
+               User.find({
+                   username: {$in: userNames}
+               })
+               .then(docs => {
+
+                   var sortedDoc = []
+
+                   ans.forEach(e1 => {
+                       docs.forEach(e2 => {
+                           // console.log(e1, e2.name);
+                           if (e1.target == e2.username)
+                               sortedDoc.push(e2)
+                       })
+                   })
+
+                   res.send(sortedDoc)
+
+               })
+            .catch(err => console.log(err))
+
+           })
+   }
+    
+}
+
+exports.getPost = async (req, res, next) => {
+    const {id} = req.params
+
+    let link = await Link.find({_id: id})
+    let user = await User.find({_id: link.userId})
+
+    if(link){
+        res.render('posts/post',{
+            title: link.name,
+            data: link,
+            user: link.user
+        })
+    }
+    else{
+        res.redirect('/')
+    }
    
-    Link.find({ type : {$in : queryList} })
-        .then(data => {
-            console.log(data);
-
-            var list = data.map(e => e.name)
-
-            //find the best matches
-            ans = stringSimilarity.findBestMatch(keyString, list).ratings
-
-            //get the list by ratings
-            ans.sort((first, second) => first.rating < second.rating)
-           
-            console.log(ans);
-
-            //get all the names
-            const linkNames = ans.map(e => e.target)
-            console.log(linkNames);
-
-            
-            //get their corresponding links object
-            return Link.find({ name: { $in: linkNames } })
-
-        })
-        .then((docs) => {
-            //sort the documents
-
-            var sortedDoc = []
-
-            ans.forEach(e1 => {
-                docs.forEach(e2 => {
-                    console.log(e1, e2.name);
-                    if(e1.target == e2.name)
-                        sortedDoc.push(e2)
-                })
-            })
-           
-
-            res.send(sortedDoc)
-        })
-        .catch(err => console.log(err))
-
-
+   
 }

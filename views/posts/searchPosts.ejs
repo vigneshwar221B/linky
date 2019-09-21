@@ -13,7 +13,7 @@
 
                     <input type="text" id="search-box" 
                     autocomplete="off" onkeyup="onSearch()"
-                    placeholder="search for groups"></input>
+                    placeholder="search ..."></input>
                     
                 </div>
 
@@ -22,11 +22,11 @@
     </div>
 
     <!-- tools -->
-    <div class="row s12" id="tools" style="margin-bottom: 0;"> 
-          <div class="input-field" style="height: 30px; width: 350px">
+    <div class="row s12 " id="tools" style="margin-bottom: 0;"> 
+          <div class="input-field col s8" style="height: 30px; width: 350px">
             <select multiple id="type">
 
-                <option value="all" disabled selected >type</option>
+                <option value="all" disabled selected >select type</option>
                
                 <option value="whatsapp" selected>whatsapp</option>
                 <option value="discord" selected>discord</option>
@@ -34,16 +34,29 @@
 
             </select>
         </div>
+
+        <div class="col s4 right" id="in-div" style ="padding: 10px; margin: 20px 2px 20px">
+            <form id="myForm" class="right">
+                <label>
+                    <input name="radioName" type="radio" value ="group" checked />
+                    <span>group</span>
+                </label>
+                
+                <label>
+                    <input name="radioName" type="radio" value="profile"/>
+                    <span>profile</span>
+                </label>
+            </form>
+              
+        </div>
     </div>
 
     <div class="row s12" id="pagination" style="margin-top: 60px">  
-            1 2 3
+       
     </div>
 
     <!-- results -->
-    <div class="row s12" id="resArea" style="margin-top: 30px">  
-
-    </div>
+    <div class="row s12" id="resArea" style="margin-top: 30px">  </div>
 
 </div>
 
