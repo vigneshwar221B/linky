@@ -38,7 +38,7 @@ const fileFilter = (req, file, cb) => {
 
 //setting up cookies
 const store = new MongoDBStore({
-    uri: 'mongodb://localhost/linksDB',
+    uri: 'mongodb+srv://admin-vwar:alohomora@cluster0-ukrda.mongodb.net/linksDB',
     collection: 'sessions'
 });
 
@@ -74,7 +74,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')))
 app.use(csrfProtection);
 
 //connect to mongodb
-mongoose.connect('mongodb://localhost/linksDB', {
+mongoose.connect('mongodb+srv://admin-vwar:alohomora@cluster0-ukrda.mongodb.net/linksDB', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })

@@ -10,7 +10,6 @@ exports.getUsersCount = (req, res, next) =>
         res.send(`Total no. of users: ${count}`)
 })
 
-
 exports.getHome = (req, res, next) => {
     res.render('main/homepage', {
         title: 'linky',
@@ -20,6 +19,9 @@ exports.getHome = (req, res, next) => {
 }
 
 exports.getProfile = (req, res, next) => {
+    let errors = req.flash('error')
+    let lerror = req.flash('linkerror')
+    let clerror = req.flash('clinkerror')
     const { id } = req.params
 
     User.findOne({ _id: id }).then(user => {
@@ -35,7 +37,10 @@ exports.getProfile = (req, res, next) => {
                     posts,
                     activeUser: req.user,
                     title: user.username + '\'s profile',
-                    id
+                    id,
+                    errors,
+                    lerror,
+                    clerror
                 })
             })
         }
@@ -55,9 +60,10 @@ exports.updateProfile = (req, res, next) => {
 
     if (!image && !about) {
         console.log('some errror');
-        req.flash('error', 'choose a proper file or about can\'t be empty ')
+        req.flash('error', 'you can\'t submit nothing')
         return res.redirect(`/profile/${id}`)
     }
+
     else if(image){
         const imagePath = image.path;
         var olderimagePath

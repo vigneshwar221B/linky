@@ -9,22 +9,29 @@ exports.getHome = (req, res, next) => {
 }
 
 exports.getlogin = (req, res, next) => {
+    let errors = req.flash('error')
     res.render('welcome/login', {
-        title: 'login'
+        title: 'login',
+        errors
     })
 }
 
 exports.getSignup = (req, res, next) => {
-    let error = req.flash('error')
-    console.log(error);
+    let errors = req.flash('error')
+    console.log(errors);
     res.render('welcome/signup', {
-        title: 'signup'
+        title: 'signup',
+        errors
     })
 }
 
 exports.postlogin = (req, res, next) => {
     const { email, password } = req.body
-    console.log(email, password);
+    if(!email || !password){
+        req.flash('error', 'enter something')
+        res.redirect('/login')
+    }
+    
     User.findOne({ email: email })
         .then(user => {
             if (!user) {
@@ -48,6 +55,7 @@ exports.postlogin = (req, res, next) => {
                     }
                     else {
                         console.log('no match');
+                        req.flash('error', 'password does not match')
                         res.redirect('/login')
                     }
                 })
@@ -56,14 +64,33 @@ exports.postlogin = (req, res, next) => {
 
 }
 
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
 exports.postSignup = (req, res, next) => {
     const { email, username, password, confirmpassword,firstname, lastname } = req.body
-    console.log(req.body)
+    //console.log(req.body)
 
-    //FIXME: VALIDATE THE USER DETAILS
+    //validation
+    if (!email || !username || !password || !confirmpassword || !firstname || !lastname){
+        req.flash('error', 'make sure you filled everything')
+        return res.redirect('/signup')
+    }
+    if (!validateEmail(email)){
+        req.flash('error', 'check your email address')
+        return res.redirect('/signup')
+    }
+
     if (password != confirmpassword) {
         console.log("password should be same");
-        req.flash('error', 'password should be same')
+        req.flash('error', 'password should be the same')
+        return res.redirect('/signup')
+    }
+
+    if(password.length < 8){
+        req.flash('error', 'password length should be atleast 8 characters long')
         return res.redirect('/signup')
     }
 

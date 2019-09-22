@@ -9,6 +9,12 @@ exports.changePostLinks = (req, res, next) => {
 
     const { name, body, groupLink, postId } = req.body
 
+    if (!name || !body || !groupLink) {
+        req.flash('clinkerror', 'make sure you entered everything maybe except the photo')
+        return res.redirect(`/profile/${req.user._id}`)
+    }
+
+
     var tg = /https:\/\/www[.]t[.]me/g.exec(groupLink)
     var dd = /https:\/\/www[.]discord/g.exec(groupLink)
     var wa = /https:\/\/www[.]chat[.]whatsapp/g.exec(groupLink)
@@ -41,6 +47,11 @@ exports.postAddLinks = (req, res, next) => {
     console.log(req.file)
     const { id } = req.params
     const { name, body, groupLink } = req.body
+
+    if (!name || !body || !groupLink ){
+        req.flash('linkerror', 'make sure you entered everything maybe except the photo')
+        return res.redirect(`/profile/${id}`)
+    }
 
     var tg = /https:\/\/www[.]t[.]me/g.exec(groupLink)
     var dd = /https:\/\/www[.]discord/g.exec(groupLink)

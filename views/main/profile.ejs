@@ -2,10 +2,35 @@
 <link rel="stylesheet" type="text/css" href="/css/profile.css" />
 <script src="/js/profile.js"></script>
 
+<%if(errors.length > 0){%>
+    <script>
+        //console.log('<%= errors %>')
+        M.AutoInit();
+        M.toast({ html: '<%= errors %>', classes: 'rounded' });  
+    </script>
+<%}%>
+
+
+<%if(lerror.length > 0){%>
+    <script>
+        //console.log('<%= lerror %>')
+        M.AutoInit();
+        M.toast({ html: '<%= lerror %>', classes: 'rounded' });  
+    </script>
+<%}%>
+
+<%if(clerror.length > 0){%>
+    <script>
+        //console.log('<%= clerror %>')
+        M.AutoInit();
+        M.toast({ html: '<%= clerror %>', classes: 'rounded' });  
+    </script>
+<%}%>
+
 <div class="row" style="margin-top:30px;">
       
-    <div class="col s1"></div>
-    <div class="col s2 " style="padding: 0; margin-top: 50px">
+    <div class="col m1"></div>
+    <div class="col m2 " style="padding: 0; margin-top: 50px">
         <div class = "row ">
             
         </div>
@@ -22,7 +47,7 @@
         
     </div>
 
-    <div class="col s4 " style="margin-left: 70px; margin-top: 10px">
+    <div class="col m4 " style="margin-left: 70px; margin-top: 10px">
 
         <p class="flow-text" style="font-family: 'Concert One'; margin-top: 50px;">
             <%= user.username%><br>
@@ -75,7 +100,7 @@
     </div>
 
     <!-- add links box -->
-    <div class="col s4">
+    <div class="col s12 m4">
         <%if(user._id.toString() == activeUser._id.toString()){%>
             <%- include('../includes/add-link.ejs') %>
         <%}%>
