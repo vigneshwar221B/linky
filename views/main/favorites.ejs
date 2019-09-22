@@ -9,7 +9,7 @@
     </blockquote>
 
     <div class = "row">
-        <%if(data.favorites.length == 0){%>
+        <%if(data.length == 0){%>
         <div class="col s2"></div>
             <div class="col s8" >
                
@@ -29,7 +29,35 @@
             </div>
             <div class="col s2"></div>
         <%}else{%>
-            ha! found one
+            <div class = "row" style="margin-top: 70px">
+                <%data.forEach(el => {%>
+
+                    <div class="col m4">
+                   
+                        <div class="card hoverable" style="margin: 0; padding: 10px">
+                        
+                            <div class="card-image waves-effect waves-block waves-light">
+                            <%if(el.img){%>
+                                <img class="activator" src='<%= el.img %>' style="height: 150px">
+                            <%}else{%>
+                                <img class="activator" src='<%= el.dimg %>' style="height: 150px">
+                            <%}%>
+                            </div>
+                            <div class="card-content">
+                                <span class="card-title activator grey-text text-darken-4"><%= el.name %> <i class="material-icons right">more_vert</i></span>
+                                <p><a href=  <%= el.groupLink %> >view</a></p>
+                            </div>
+                            <div class="card-reveal">
+                                <span class="card-title grey-text text-darken-4"> About <i class="material-icons right">close</i></span>
+                                <p> <%= el.body %> </p>
+                            </div>
+                        </div>
+                    
+                </div>
+         
+
+            <%})%>
+               </div> 
         <%}%>
     </div>
 </div>

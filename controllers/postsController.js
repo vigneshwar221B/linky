@@ -81,8 +81,11 @@ exports.getSearch = (req, res, next) => {
 }
 
 
+const ITEMS_PER_PAGE = 3;
+
 exports.getSearchRes = (req, res, next) => {
     var { keyString, type, qtype } = req.query
+    const page = +req.query.page || 1;
 
     //console.log("qtype ",typeof(qtype));
 
@@ -91,82 +94,109 @@ exports.getSearchRes = (req, res, next) => {
     var ans
     //get all the links of given type
     if (qtype == 'group') {
-        Link.find({ type: { $in: queryList } })
-            .then(data => {
-                //console.log(data);
+        var totDoc
+        Link.countDocuments({}, (err, count) => {
+            Link.find({ type: { $in: queryList } })
+                .then(data => {
+                    //console.log(data);
 
-                var list = data.map(e => e.name)
+                    var list = data.map(e => e.name)
 
-                //find the best matches
-                ans = stringSimilarity.findBestMatch(keyString, list).ratings
+                    //find the best matches
+                    ans = stringSimilarity.findBestMatch(keyString, list).ratings
 
-                //get the list by ratings
-                ans.sort((first, second) => first.rating < second.rating)
+                    //get the list by ratings
+                    ans.sort((first, second) => first.rating < second.rating)
+                    //console.log(ans);
 
-                //console.log(ans);
+                    //get all the names
+                    const linkNames = ans.map(e => e.target)
+                    //console.log(linkNames);
 
-                //get all the names
-                const linkNames = ans.map(e => e.target)
-                //console.log(linkNames);
+                    totDoc = count
+                    //get their corresponding links object
+                    return Link.find({ name: { $in: linkNames } })
+                        .skip((page - 1) * ITEMS_PER_PAGE)
+                        .limit(ITEMS_PER_PAGE);
 
+                })
+                .then((docs) => {
+                    //sort the documents
+                    var sortedDoc = []
 
-                //get their corresponding links object
-                return Link.find({ name: { $in: linkNames } })
+                    ans.forEach(e1 => {
+                        docs.forEach(e2 => {
+                            // console.log(e1, e2.name);
+                            if (e1.target == e2.name)
+                                sortedDoc.push(e2)
+                        })
+                    })
 
-            })
-            .then((docs) => {
-                //sort the documents
+                    res.send({
+                        sortedDoc,
+                        currentPage: page,
+                        hasNextPage: ITEMS_PER_PAGE * page < totDoc,
+                        hasPreviousPage: page > 1,
+                        nextPage: page + 1,
+                        previousPage: page - 1,
+                        lastPage: Math.ceil(totDoc / ITEMS_PER_PAGE),
 
-                var sortedDoc = []
-
-                ans.forEach(e1 => {
-                    docs.forEach(e2 => {
-                        // console.log(e1, e2.name);
-                        if (e1.target == e2.name)
-                            sortedDoc.push(e2)
                     })
                 })
+                .catch(err => console.log(err))
+        })
 
-                res.send(sortedDoc)
-            })
-            .catch(err => console.log(err))
+
 
     } else {
-        var userNameList, ans
-        User.find()
-            .then(data => {
-                userNameList = data.map(e => e.username)
-                //console.log(userNameList)
+        var userNameList, ans, totUsers
 
-                ans = stringSimilarity.findBestMatch(keyString, userNameList).ratings
+        User.countDocuments({}, (err, count) => {
+            totUsers = count
+            User.find()
+                .then(data => {
+                    userNameList = data.map(e => e.username)
+                    //console.log(userNameList)
 
-                ans.sort((first, second) => first.rating < second.rating)
+                    ans = stringSimilarity.findBestMatch(keyString, userNameList).ratings
 
-                const userNames = ans.map(e => e.target)
+                    ans.sort((first, second) => first.rating < second.rating)
 
-                console.log(userNames);
+                    const userNames = ans.map(e => e.target)
 
-                User.find({
-                    username: { $in: userNames }
-                })
-                    .then(docs => {
+                    //console.log(userNames);
 
-                        var sortedDoc = []
-
-                        ans.forEach(e1 => {
-                            docs.forEach(e2 => {
-                                // console.log(e1, e2.name);
-                                if (e1.target == e2.username)
-                                    sortedDoc.push(e2)
-                            })
-                        })
-
-                        res.send(sortedDoc)
-
+                    User.find({
+                        username: { $in: userNames }
                     })
-                    .catch(err => console.log(err))
+                        .skip((page - 1) * ITEMS_PER_PAGE)
+                        .limit(ITEMS_PER_PAGE)
+                        .then(docs => {
+                            var sortedDoc = []
 
-            })
+                            ans.forEach(e1 => {
+                                docs.forEach(e2 => {
+                                    // console.log(e1, e2.name);
+                                    if (e1.target == e2.username)
+                                        sortedDoc.push(e2)
+                                })
+                            })
+                            res.send({
+                                sortedDoc,
+                                currentPage: page,
+                                hasNextPage: ITEMS_PER_PAGE * page < totUsers,
+                                hasPreviousPage: page > 1,
+                                nextPage: page + 1,
+                                previousPage: page - 1,
+                                lastPage: Math.ceil(totUsers / ITEMS_PER_PAGE)
+                            })
+
+                        })
+                        .catch(err => console.log(err))
+
+                })
+        })
+
     }
 
 }
@@ -189,21 +219,21 @@ exports.getPost = async (req, res, next) => {
     }
 }
 
-exports.favoriteHandler = async(req, res, next) => {
+exports.favoriteHandler = async (req, res, next) => {
 
     const { id } = req.body
 
-    let user = await User.findOne({_id: req.user._id})
+    let user = await User.findOne({ _id: req.user._id })
     console.log(id);
-    let link = await Link.findOne({_id: id})
+    let link = await Link.findOne({ _id: id })
 
     let index = user.favorites.indexOf(link._id)
 
-    if(index == -1){
+    if (index == -1) {
         user.favorites.push(link)
         await user.save()
         res.send('added')
-    }else{
+    } else {
         user.favorites.splice(index, 1)
         await user.save()
         res.send('removed')
@@ -211,9 +241,18 @@ exports.favoriteHandler = async(req, res, next) => {
 
 }
 
-exports.getFavorites = (req,res, next) => {
-    res.render('main/favorites',{
-        title: 'favorites',
-        data: req.user
+exports.getFavorites = (req, res, next) => {
+    var list = req.user.favorites
+
+    Link.find({
+        _id: { $in: list }
     })
+        .then(docs => {
+            res.render('main/favorites', {
+                title: 'favorites',
+                data: docs
+            })
+        })
+        .catch(err => console.log(err))
+
 }

@@ -36,6 +36,21 @@ const fileFilter = (req, file, cb) => {
     }
 };
 
+//setting up cookies
+const store = new MongoDBStore({
+    uri: 'mongodb://localhost/linksDB',
+    collection: 'sessions'
+});
+
+app.use(
+    session({
+        secret: 'meow',
+        resave: false,
+        saveUninitialized: false,
+        store: store
+    })
+);
+
 //importing routes
 var authRoute = require('./routes/auth')
     , homeRoute = require('./routes/home')
@@ -54,20 +69,6 @@ app.use(
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
-//setting up cookies
-const store = new MongoDBStore({
-    uri: 'mongodb://localhost/linksDB',
-    collection: 'sessions'
-});
-
-app.use(
-    session({
-        secret: 'meow',
-        resave: false,
-        saveUninitialized: false,
-        store: store
-    })
-);
 
 //adding csrf protection
 app.use(csrfProtection);
