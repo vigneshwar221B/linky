@@ -9,7 +9,7 @@ const link = new Schema({
     groupLink:String,
     img: String,
     dimg: String,
-    additionalLinks: [String],
+    //additionalLinks: [String],
     // time: Date.now(),
 
     likes: [Object],
@@ -18,6 +18,7 @@ const link = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
+    favorite: Boolean,
     
     type: String
 })

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+, Schema = mongoose.Schema
 
 const user = new mongoose.Schema({
     
@@ -12,7 +13,10 @@ const user = new mongoose.Schema({
     dimg: String,
     about: String,
 
-    favorites: [Object],
+    favorites: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Link'
+    }],
 
     requested: [{
         body: String,

@@ -6,7 +6,7 @@ exports.changePostLinks = (req, res, next) => {
     const imageExists = req.file
 
     console.log(req.file)
-    
+
     const { name, body, groupLink, postId } = req.body
 
     var tg = /https:\/\/www[.]t[.]me/g.exec(groupLink)
@@ -15,22 +15,22 @@ exports.changePostLinks = (req, res, next) => {
 
     var type = tg ? "telegram" : (dd ? "discord" : "whatsapp")
 
-    Link.findOne({_id : postId})
-    .then(doc => {
-        doc.name = name
-        doc.body = body
-        doc.groupLink = groupLink
-        doc.type = type
+    Link.findOne({ _id: postId })
+        .then(doc => {
+            doc.name = name
+            doc.body = body
+            doc.groupLink = groupLink
+            doc.type = type
 
-        if(imageExists)
-            doc.img = imageExists.path
-        
+            if (imageExists)
+                doc.img = imageExists.path
+
             return doc.save()
-    })
-    .then(() => {
-        res.redirect(`/profile/${req.user._id}`)
-    })
-    .catch(err => console.log(err))
+        })
+        .then(() => {
+            res.redirect(`/profile/${req.user._id}`)
+        })
+        .catch(err => console.log(err))
 
 }
 
@@ -53,7 +53,8 @@ exports.postAddLinks = (req, res, next) => {
         link = new Link({
             name, body, groupLink, type,
             userId: req.user,
-            img: imageExists.path
+            img: imageExists.path,
+            user: req.user.username
         })
     } else {
         link = new Link({
@@ -81,110 +82,137 @@ exports.getSearch = (req, res, next) => {
 
 exports.getSearchRes = (req, res, next) => {
     var { keyString, type, qtype } = req.query
-    
+
     //console.log("qtype ",typeof(qtype));
 
     var queryList = type.split(',')
-    
+
     var ans
     //get all the links of given type
-   if(qtype == 'group'){
-       Link.find({ type: { $in: queryList } })
-           .then(data => {
-               //console.log(data);
+    if (qtype == 'group') {
+        Link.find({ type: { $in: queryList } })
+            .then(data => {
+                //console.log(data);
 
-               var list = data.map(e => e.name)
+                var list = data.map(e => e.name)
 
-               //find the best matches
-               ans = stringSimilarity.findBestMatch(keyString, list).ratings
+                //find the best matches
+                ans = stringSimilarity.findBestMatch(keyString, list).ratings
 
-               //get the list by ratings
-               ans.sort((first, second) => first.rating < second.rating)
+                //get the list by ratings
+                ans.sort((first, second) => first.rating < second.rating)
 
-               //console.log(ans);
+                //console.log(ans);
 
-               //get all the names
-               const linkNames = ans.map(e => e.target)
-               //console.log(linkNames);
+                //get all the names
+                const linkNames = ans.map(e => e.target)
+                //console.log(linkNames);
 
 
-               //get their corresponding links object
-               return Link.find({ name: { $in: linkNames } })
+                //get their corresponding links object
+                return Link.find({ name: { $in: linkNames } })
 
-           })
-           .then((docs) => {
-               //sort the documents
+            })
+            .then((docs) => {
+                //sort the documents
 
-               var sortedDoc = []
+                var sortedDoc = []
 
-               ans.forEach(e1 => {
-                   docs.forEach(e2 => {
-                      // console.log(e1, e2.name);
-                       if (e1.target == e2.name)
-                           sortedDoc.push(e2)
-                   })
-               })
+                ans.forEach(e1 => {
+                    docs.forEach(e2 => {
+                        // console.log(e1, e2.name);
+                        if (e1.target == e2.name)
+                            sortedDoc.push(e2)
+                    })
+                })
 
-               res.send(sortedDoc)
-           })
-           .catch(err => console.log(err))
+                res.send(sortedDoc)
+            })
+            .catch(err => console.log(err))
 
-   }else{
-       var userNameList, ans
-       User.find()
-           .then(data => {
+    } else {
+        var userNameList, ans
+        User.find()
+            .then(data => {
                 userNameList = data.map(e => e.username)
                 //console.log(userNameList)
 
-               ans = stringSimilarity.findBestMatch(keyString, userNameList).ratings
+                ans = stringSimilarity.findBestMatch(keyString, userNameList).ratings
 
-               ans.sort((first, second) => first.rating < second.rating)
+                ans.sort((first, second) => first.rating < second.rating)
 
-               const userNames = ans.map(e => e.target)
+                const userNames = ans.map(e => e.target)
 
-               console.log(userNames);
+                console.log(userNames);
 
-               User.find({
-                   username: {$in: userNames}
-               })
-               .then(docs => {
+                User.find({
+                    username: { $in: userNames }
+                })
+                    .then(docs => {
 
-                   var sortedDoc = []
+                        var sortedDoc = []
 
-                   ans.forEach(e1 => {
-                       docs.forEach(e2 => {
-                           // console.log(e1, e2.name);
-                           if (e1.target == e2.username)
-                               sortedDoc.push(e2)
-                       })
-                   })
+                        ans.forEach(e1 => {
+                            docs.forEach(e2 => {
+                                // console.log(e1, e2.name);
+                                if (e1.target == e2.username)
+                                    sortedDoc.push(e2)
+                            })
+                        })
 
-                   res.send(sortedDoc)
+                        res.send(sortedDoc)
 
-               })
-            .catch(err => console.log(err))
+                    })
+                    .catch(err => console.log(err))
 
-           })
-   }
-    
+            })
+    }
+
 }
 
 exports.getPost = async (req, res, next) => {
-    const {id} = req.params
+    const { id } = req.params
 
-    let link = await Link.find({_id: id})
-    let user = await User.find({_id: link.userId})
+    let link = await Link.find({ _id: id })
+    let user = await User.find({ _id: link.userId })
 
-    if(link){
-        res.render('posts/post',{
+    if (link) {
+        res.render('posts/post', {
             title: link.name,
             data: link,
             user: link.user
         })
     }
-    else{
+    else {
         res.redirect('/')
     }
-   
-   
+}
+
+exports.favoriteHandler = async(req, res, next) => {
+
+    const { id } = req.body
+
+    let user = await User.findOne({_id: req.user._id})
+    console.log(id);
+    let link = await Link.findOne({_id: id})
+
+    let index = user.favorites.indexOf(link._id)
+
+    if(index == -1){
+        user.favorites.push(link)
+        await user.save()
+        res.send('added')
+    }else{
+        user.favorites.splice(index, 1)
+        await user.save()
+        res.send('removed')
+    }
+
+}
+
+exports.getFavorites = (req,res, next) => {
+    res.render('main/favorites',{
+        title: 'favorites',
+        data: req.user
+    })
 }

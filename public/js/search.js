@@ -2,7 +2,6 @@ $(document).ready(function () {
     $('select').formSelect()
 });
 
-
 const onSearch = () => {
 
     var searchword = $("#search-box").val()
@@ -35,9 +34,7 @@ const onSearch = () => {
             <div class="row center-align">
                 page 1 of 4 
             </div>
-
-            
-            
+ 
         </div>
 
         <div class="col s4 left-align">
@@ -48,7 +45,6 @@ const onSearch = () => {
             </a>
         </div>
             `)
-
 
             data.forEach(el => {
                 
@@ -64,7 +60,7 @@ const onSearch = () => {
                                 <p><a href="${  el.groupLink || "/profile/" + el._id }">view</a></p>
                             </div>
                             <div class="card-reveal">
-                                <span class="card-title grey-text text-darken-4">${el.user || el.username}<i class="material-icons right">close</i></span>
+                                <span class="card-title grey-text text-darken-4">${"created by "+el.user || el.username}<i class="material-icons right">close</i></span>
                                 <p>${el.about || el.body}</p>
                             </div>
                         </div>

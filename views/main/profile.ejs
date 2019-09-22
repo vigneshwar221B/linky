@@ -6,14 +6,23 @@
       
     <div class="col s1"></div>
     <div class="col s2 " style="padding: 0; margin-top: 50px">
-        <%if(user.img){%>
-            <img class="responsive-img" src='/<%= user.img %>'>
-        <%}else{%>
-            <img class="responsive-img" src='<%= user.dimg %>'>
-        <%}%>
+        <div class = "row ">
+            
+        </div>
+        <div class = "row " >
+            <%if(user.img){%>
+                <img class="responsive-img center" src='/<%= user.img %>' style="height: 270px; width: 230px; margin-left: 35px">
+            <%}else{%>
+                <img class="responsive-img center" src='<%= user.dimg %>' style="height: 230px; width: 230px; margin-left: 35px">
+            <%}%>
+        </div>
+        <div class = "row">
+            
+        </div>
+        
     </div>
 
-    <div class="col s4 ">
+    <div class="col s4 " style="margin-left: 70px; margin-top: 10px">
 
         <p class="flow-text" style="font-family: 'Concert One'; margin-top: 50px;">
             <%= user.username%><br>
@@ -24,7 +33,7 @@
         <%if(user._id.toString() == activeUser._id.toString()){%>
             <a class="waves-effect waves-light btn deep-purple accent-3 modal-trigger" href="#modal1">
             <i class="material-icons left">edit</i>
-            Edit picture
+            Edit profile
             </a>
 
 
@@ -137,6 +146,7 @@
         <ul>
             <% posts.reverse().forEach(el => { %>
                     <div class="card hoverable" style="margin-bottom: 25px;">
+                   
                         <div class="card-image">
                         
                         <%if(el.img){%>
@@ -173,6 +183,17 @@
                                 href="#modal2"
                                 target="_blank" style="margin-right: 70px">
                                 <i class="material-icons ">edit</i>
+                            </a>
+                        <%}%>
+                        <%if(user.favorites.indexOf(el._id) >= 0){%>
+                            <a class="btn-floating halfway-fab waves-effect waves-light purple accent-4 btn-large left"
+                                    onClick="bookmark('<%= el._id %>','<%= el.favorite %>','<%= csrfToken %>')">
+                                    <i class="material-icons" id="csbookmark<%= el._id %>">bookmark</i>
+                            </a>
+                        <%}else{%>
+                            <a class="btn-floating halfway-fab waves-effect waves-light btn-large purple accent-4 left"
+                                onClick="bookmark('<%= el._id %>','<%= el.favorite %>','<%= csrfToken %>')">
+                                <i class="material-icons" id="csbookmark<%= el._id %>">bookmark_border</i>
                             </a>
                         <%}%>
                         </div>

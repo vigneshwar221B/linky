@@ -8,5 +8,7 @@ router.get('/searchRes', controller.getSearchRes)
 
 router.get('/post/:id', controller.getPost)
 router.post('/post/change-link', controller.changePostLinks)
+router.post('/favoriteHandler', isAuth, controller.favoriteHandler)
+router.get('/favorites', controller.getFavorites)
 
 module.exports = router

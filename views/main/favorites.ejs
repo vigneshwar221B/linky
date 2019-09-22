@@ -1,0 +1,23 @@
+<%- include('../includes/header.ejs') %>
+<link rel="stylesheet" type="text/css" href="/css/favorites.css" />
+<script src="/js/favorites.js"></script>
+
+
+<div class = "container">
+    <blockquote>
+        Your favorites:
+    </blockquote>
+
+    <div class = "row">
+        <%if(data.favorites.length == 0){%>
+            empty
+        <%}else{%>
+            ha! found one
+        <%}%>
+    </div>
+</div>
+
+
+
+
+<%- include('../includes/footer.ejs') %>
