@@ -59,6 +59,7 @@ exports.postAddLinks = (req, res, next) => {
     } else {
         link = new Link({
             name, body, groupLink, type,
+            user: req.user.username,
             userId: req.user,
             dimg: "http://www.pixel-creation.com/wp-content/uploads/black-red-background-sf-wallpaper-800x450.jpg"
         })

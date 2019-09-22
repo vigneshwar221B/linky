@@ -10,14 +10,29 @@
 
     <div class = "row">
         <%if(data.favorites.length == 0){%>
-            empty
+        <div class="col s2"></div>
+            <div class="col s8" >
+               
+                <div class="card-panel deep-purple accent-3" style="height: 500px">
+                    <span class="white-text">
+                        <p >
+                            <p class ="center" style="margin-top: 80px">Your favorites list is empty</p>
+                            <p class ="center">
+                                <i class="material-icons large" style="margin-top: 100px">bookmark</i>
+                            </p>
+                            <p class ="center">click on the above icon you see in posts to add it in your favorites</p>
+
+                        </<p>
+                    </span>
+                </div>
+
+            </div>
+            <div class="col s2"></div>
         <%}else{%>
             ha! found one
         <%}%>
     </div>
 </div>
-
-
 
 
 <%- include('../includes/footer.ejs') %>
