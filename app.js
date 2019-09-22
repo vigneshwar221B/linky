@@ -121,4 +121,4 @@ app.use((req, res, next) => {
 })
 
 //starting the server
-app.listen(8080, () => console.log('server started at http://localhost:8080'))
+app.listen(process.env.PORT || 8080, () => console.log('server started at http://localhost:8080'))
