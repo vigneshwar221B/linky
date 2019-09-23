@@ -14,6 +14,8 @@ const express = require('express')
 
 const csrfProtection = csrf()
 
+const MONGODB_URI = ""
+
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'images');
@@ -28,18 +30,20 @@ const fileFilter = (req, file, cb) => {
         file.mimetype === 'image/png' ||
         file.mimetype === 'image/jpg' ||
         file.mimetype === 'image/jpeg' ||
-        file.mimetype === 'image/gif'
-    ) {
+        file.mimetype === 'image/gif') 
         cb(null, true)
-    } else {
+
+     else 
         cb(null, false)
-    }
+    
 };
 
 //setting up cookies
 const store = new MongoDBStore({
-    uri: 'mongodb+srv://admin-vwar:alohomora@cluster0-ukrda.mongodb.net/linksDB',
+
+    uri: MONGODB_URI,
     collection: 'sessions'
+
 });
 
 app.use(
@@ -69,12 +73,11 @@ app.use(
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
-
 //adding csrf protection
 app.use(csrfProtection);
 
 //connect to mongodb
-mongoose.connect('mongodb+srv://admin-vwar:alohomora@cluster0-ukrda.mongodb.net/linksDB', {
+mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
