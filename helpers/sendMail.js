@@ -4,8 +4,8 @@ module.exports = (to, subject, body) => {
         
     const imgUrl = "https://66.media.tumblr.com/9815f7df188fdde0e19933524fdaf4e1/456f1fcd862250cb-49/s640x960/ee006d960bef1e652004b3d3a5fdcd2745730200.jpg"
 
-    let mail = 'vigneshwar221b@gmail.com' //your mailId
-    let password = 'Alohomoraandrevelio1!' //your pasword
+    let mail = '' //your mailId
+    let password = '' //your pasword
 
     let transporter = nodemailer.createTransport({
         service: 'gmail',
