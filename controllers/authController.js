@@ -71,7 +71,6 @@ function validateEmail(email) {
 
 exports.postSignup = (req, res, next) => {
     const { email, username, password, confirmpassword,firstname, lastname } = req.body
-    //console.log(req.body)
 
     //validation
     if (!email || !username || !password || !confirmpassword || !firstname || !lastname){

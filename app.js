@@ -14,7 +14,7 @@ const express = require('express')
 
 const csrfProtection = csrf()
 
-const MONGODB_URI = ""
+const MONGODB_URI = "mongodb+srv://admin-vwar:alohomora@cluster0-ukrda.mongodb.net/test?retryWrites=true&w=majority"
 
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {

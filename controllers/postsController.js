@@ -48,7 +48,7 @@ exports.postAddLinks = (req, res, next) => {
     const { id } = req.params
     const { name, body, groupLink } = req.body
 
-    if (!name || !body || !groupLink ){
+    if (!name || !body || !groupLink) {
         req.flash('linkerror', 'make sure you entered everything maybe except the photo')
         return res.redirect(`/profile/${id}`)
     }
@@ -98,9 +98,10 @@ exports.getSearchRes = (req, res, next) => {
     var { keyString, type, qtype } = req.query
     const page = +req.query.page || 1;
 
-    //console.log("qtype ",typeof(qtype));
+    //console.log("qtype ", typeof (qtype));
 
     var queryList = type.split(',')
+    //console.log(queryList);
 
     var ans
     //get all the links of given type
@@ -112,9 +113,10 @@ exports.getSearchRes = (req, res, next) => {
                     //console.log(data);
 
                     var list = data.map(e => e.name)
-
+                  
                     //find the best matches
-                    ans = stringSimilarity.findBestMatch(keyString, list).ratings
+                    if(list.length == 0) list = ['']
+                    ans = stringSimilarity.findBestMatch(keyString, list ).ratings
 
                     //get the list by ratings
                     ans.sort((first, second) => first.rating < second.rating)
